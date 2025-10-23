@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>타임캡슐 대화 - AI로 만나는 독립운동가</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🇰🇷</text></svg>">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --taegeuk-red: #CD2E3A;
+            --taegeuk-blue: #0047A0;
+            --sepia-light: #F5F1E8;
+            --sepia-dark: #8B7355;
+            --text-dark: #2C2C2C;
+            --text-light: #666;
+        }
+
+        body {
+            font-family: 'Nanum Gothic', sans-serif;
+            background: linear-gradient(135deg, var(--sepia-light) 0%, #E8DCC8 100%);
+            color: var(--text-dark);
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--taegeuk-red) 0%, #A82329 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect fill="rgba(255,255,255,0.05)" width="50" height="50"/></svg>');
+            opacity: 0.3;
+        }
+
+        h1 {
+            font-family: 'Nanum Myeongjo', serif;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            font-weight: 400;
+            position: relative;
+        }
+
+        /* Intro Section */
+        .intro {
+            padding: 80px 20px;
+            text-align: center;
+            background: white;
+        }
+
+        .intro-text {
+            font-family: 'Nanum Myeongjo', serif;
+            font-size: 1.3rem;
+            line-height: 2;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            color: var(--text-light);
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 18px 50px;
+            background: var(--taegeuk-blue);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,71,160,0.3);
+        }
+
+        .cta-button:hover {
+            background: #003580;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,71,160,0.4);
+        }
+
+        /* Fighters Section */
+        .fighters-section {
+            padding: 80px 20px;
+            background: var(--sepia-light);
+        }
+
+        .section-title {
+            font-family: 'Nanum Myeongjo', serif;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 60px;
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+
+        .fighters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        
+        /* 모바일 전용 스크롤 힌트 */
+        .scroll-hint {
+            display: none;
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-top: 20px;
+            animation: fadeInOut 2s ease-in-out infinite;
+        }
+        
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        .fighter-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fighter-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(205,46,58,0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .fighter-card:hover::before {
+            left: 100%;
+        }
+
+        .fighter-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .fighter-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, var(--sepia-dark), var(--sepia-light));
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            border: 4px solid var(--taegeuk-red);
+            overflow: hidden;
+        }
+        
+        .fighter-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: sepia(20%);
+        }
+
+        .fighter-name {
+            font-family: 'Nanum Myeongjo', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        .fighter-title {
+            font-size: 0.95rem;
+            color: var(--taegeuk-blue);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .fighter-intro {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        /* Chat Section */
+        .chat-section {
+            padding: 80px 20px;
+            background: white;
+            min-height: 600px;
+            display: none;
+        }
+
+        .chat-section.active {
+            display: block;
+        }
+
+        .chat-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .chat-profile {
+            background: var(--sepia-light);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            position: sticky;
+            top: 20px;
+        }
+
+        .chat-profile-image {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, var(--sepia-dark), var(--sepia-light));
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            border: 5px solid var(--taegeuk-red);
+            overflow: hidden;
+        }
+        
+        .chat-profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: sepia(20%);
+        }
+
+        .chat-profile-name {
+            font-family: 'Nanum Myeongjo', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .chat-profile-info {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+
+        .chat-interface {
+            background: #F9F9F9;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .questions-list {
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .question-button {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 20px;
+            background: white;
+            border: 2px solid #E0E0E0;
+            color: var(--text-dark);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question-button::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--taegeuk-blue);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .question-button:hover::before {
+            transform: scaleY(1);
+        }
+
+        .question-button:hover {
+            border-color: var(--taegeuk-blue);
+            box-shadow: 0 4px 16px rgba(0, 71, 160, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .question-button.active {
+            background: linear-gradient(135deg, var(--taegeuk-blue), #0056C0);
+            color: white;
+            border-color: var(--taegeuk-blue);
+            box-shadow: 0 6px 20px rgba(0, 71, 160, 0.3);
+        }
+
+        .question-button.active .question-number {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        .question-number {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--taegeuk-blue), #0056C0);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .question-text {
+            flex: 1;
+            line-height: 1.5;
+        }
+
+        .chat-display {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            min-height: 300px;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .message {
+            margin-bottom: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .message-question {
+            background: var(--taegeuk-blue);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 20px 20px 5px 20px;
+            display: inline-block;
+            max-width: 80%;
+            margin-bottom: 15px;
+        }
+
+        .message-answer {
+            background: var(--sepia-light);
+            color: var(--text-dark);
+            padding: 20px 25px;
+            border-radius: 5px 20px 20px 20px;
+            display: inline-block;
+            max-width: 90%;
+            font-family: 'Nanum Myeongjo', serif;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 15px;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        .typing-indicator.active {
+            display: block;
+        }
+
+        /* Education Section */
+        .education-section {
+            padding: 80px 20px;
+            background: var(--taegeuk-blue);
+            color: white;
+        }
+
+        .education-title {
+            font-family: 'Nanum Myeongjo', serif;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 50px;
+            font-weight: 700;
+        }
+
+        .education-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .education-card {
+            background: white;
+            color: var(--text-dark);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .education-card h3 {
+            font-family: 'Nanum Myeongjo', serif;
+            font-size: 1.5rem;
+            color: var(--taegeuk-red);
+            margin-bottom: 15px;
+        }
+
+        .education-card p {
+            line-height: 1.7;
+            color: var(--text-light);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        footer p {
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            /* 헤더 */
+            header {
+                padding: 40px 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            /* 인트로 섹션 */
+            .intro {
+                padding: 50px 20px;
+            }
+
+            .intro-text {
+                font-size: 1.1rem;
+                line-height: 1.8;
+            }
+
+            /* CTA 버튼 */
+            .cta-button {
+                padding: 15px 40px;
+                font-size: 1.1rem;
+            }
+
+            /* 섹션 타이틀 */
+            .section-title, .education-title {
+                font-size: 2rem;
+            }
+
+            /* 독립운동가 섹션 - 수평 스크롤 */
+            .fighters-section {
+                padding: 50px 0;
+            }
+            
+            .fighters-section .container {
+                padding: 0;
+            }
+            
+            .section-title {
+                padding: 0 20px;
+            }
+            
+            .fighters-grid {
+                display: flex;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                gap: 20px;
+                padding: 30px 20px;
+                margin: 0;
+                max-width: none;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none; /* Firefox */
+            }
+            
+            .fighters-grid::-webkit-scrollbar {
+                display: none; /* Chrome, Safari */
+            }
+
+            .fighter-card {
+                flex: 0 0 280px;
+                scroll-snap-align: center;
+                padding: 25px 20px;
+            }
+
+            .fighter-image {
+                width: 100px;
+                height: 100px;
+                border: 3px solid var(--taegeuk-red);
+            }
+
+            .fighter-image img {
+                width: 100%;
+                height: 100%;
+            }
+
+            .fighter-name {
+                font-size: 1.3rem;
+            }
+
+            .fighter-title {
+                font-size: 0.9rem;
+            }
+
+            .fighter-intro {
+                font-size: 0.95rem;
+            }
+            
+            .scroll-hint {
+                display: block;
+                padding: 0 20px;
+            }
+
+            /* 채팅 섹션 */
+            .chat-section {
+                padding: 50px 15px;
+            }
+
+            .chat-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .chat-profile {
+                position: static;
+                margin-bottom: 20px;
+            }
+
+            .chat-profile-image {
+                width: 140px;
+                height: 140px;
+                border: 4px solid var(--taegeuk-red);
+            }
+
+            .chat-profile-name {
+                font-size: 1.5rem;
+            }
+
+            .chat-profile-info {
+                font-size: 0.95rem;
+            }
+
+            .chat-interface {
+                padding: 25px 20px;
+            }
+
+            .questions-list {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                max-height: 50vh;
+                overflow-y: auto;
+                padding-right: 5px;
+            }
+            
+            .questions-list::-webkit-scrollbar {
+                width: 4px;
+            }
+            
+            .questions-list::-webkit-scrollbar-track {
+                background: #f1f1f1;
+                border-radius: 10px;
+            }
+            
+            .questions-list::-webkit-scrollbar-thumb {
+                background: var(--taegeuk-blue);
+                border-radius: 10px;
+            }
+
+            .question-button {
+                padding: 15px 18px;
+                font-size: 0.9rem;
+            }
+
+            .question-number {
+                width: 28px;
+                height: 28px;
+                font-size: 0.85rem;
+            }
+
+            .chat-display {
+                padding: 20px;
+                min-height: 250px;
+            }
+
+            .message-question {
+                padding: 12px 18px;
+                font-size: 0.95rem;
+            }
+
+            .message-answer {
+                padding: 18px 20px;
+                font-size: 1rem;
+                line-height: 1.7;
+            }
+
+            /* 교육 활용 섹션 */
+            .education {
+                padding: 50px 20px;
+            }
+
+            .education-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 20px;
+            }
+
+            .education-card {
+                padding: 25px;
+            }
+
+            .education-card h3 {
+                font-size: 1.3rem;
+            }
+
+            .education-card p {
+                font-size: 0.95rem;
+            }
+
+            /* Footer */
+            footer {
+                padding: 40px 20px;
+            }
+        }
+
+        /* 추가 브레이크포인트 - 초소형 기기 */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.7rem;
+            }
+
+            .subtitle {
+                font-size: 0.9rem;
+            }
+
+            .intro-text {
+                font-size: 1rem;
+                line-height: 1.7;
+            }
+
+            .cta-button {
+                padding: 12px 30px;
+                font-size: 1rem;
+            }
+
+            .section-title, .education-title {
+                font-size: 1.7rem;
+            }
+
+            .fighters-grid {
+                gap: 15px;
+                padding: 30px 15px;
+            }
+            
+            .fighter-card {
+                flex: 0 0 260px;
+                padding: 20px 15px;
+            }
+
+            .fighter-image {
+                width: 90px;
+                height: 90px;
+            }
+
+            .fighter-name {
+                font-size: 1.2rem;
+            }
+            
+            .fighter-title {
+                font-size: 0.85rem;
+            }
+            
+            .fighter-intro {
+                font-size: 0.9rem;
+            }
+
+            .chat-section {
+                padding: 40px 10px;
+            }
+
+            .chat-interface {
+                padding: 20px 15px;
+            }
+
+            .questions-list {
+                max-height: 45vh;
+            }
+
+            .chat-display {
+                padding: 15px;
+                min-height: 200px;
+            }
+
+            .chat-profile-image {
+                width: 120px;
+                height: 120px;
+            }
+
+            .chat-profile-name {
+                font-size: 1.3rem;
+            }
+
+            .question-button {
+                padding: 12px 15px;
+                font-size: 0.85rem;
+                gap: 10px;
+            }
+
+            .question-number {
+                width: 26px;
+                height: 26px;
+                font-size: 0.8rem;
+            }
+
+            .message-question {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+
+            .message-answer {
+                padding: 15px 18px;
+                font-size: 0.95rem;
+                line-height: 1.7;
+            }
+
+            .education-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .education-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>타임캡슐 대화</h1>
+        <p class="subtitle">AI로 만나는 독립운동가 - 광복 100년을 기다리며</p>
+    </header>
+
+    <!-- Intro Section -->
+    <section class="intro">
+        <div class="container">
+            <p class="intro-text">
+                <em style="color: #666; font-size: 1.1rem;">"광복은 연합국의 승리가 아닌, 선열들의 피와 땀으로 이룬 자주독립의 성취였습니다."</em><br>
+                <span style="font-size: 0.95rem; color: #888;">- 이종찬 광복회장 (광복 80년 기념사업추진위원회 공동위원장)</span><br><br>
+                
+                80년 전, 그들은 나라를 위해 목숨을 바쳤습니다.<br>
+                만약 지금 그들을 만날 수 있다면, 무엇을 물어보고 싶으신가요?<br><br>
+                
+                AI 기술로 독립운동가들과 대화하며,<br>
+                <strong>세대를 넘어 국민이 직접 참여하는 살아있는 역사 교육</strong>을 시작합니다.<br>
+                이것이 바로 광복 100년을 준비하는 새로운 방법입니다.
+            </p>
+            <a href="#fighters" class="cta-button">지금 만나러 가기</a>
+        </div>
+    </section>
+
+    <!-- Fighters Selection -->
+    <section id="fighters" class="fighters-section">
+        <div class="container">
+            <h2 class="section-title">누구와 대화하시겠습니까?</h2>
+            <div class="fighters-grid">
+                <div class="fighter-card" data-fighter="ahn">
+                    <div class="fighter-image">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/An_Jung-geun.JPG" alt="안중근 의사">
+                    </div>
+                    <h3 class="fighter-name">안중근 의사</h3>
+                    <p class="fighter-title">대한의군 참모중장</p>
+                    <p class="fighter-intro">이토 히로부미를 처단하고 동양평화론을 저술한 독립운동가</p>
+                </div>
+
+                <div class="fighter-card" data-fighter="yu">
+                    <div class="fighter-image">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Ryu_Gwan-sun.jpg" alt="유관순 열사">
+                    </div>
+                    <h3 class="fighter-name">유관순 열사</h3>
+                    <p class="fighter-title">3.1 독립운동 열사</p>
+                    <p class="fighter-intro">18세의 나이로 아우내 장터 만세운동을 이끈 열사</p>
+                </div>
+
+                <div class="fighter-card" data-fighter="kim">
+                    <div class="fighter-image">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/d/db/Kim_Gu_in_1949.jpg" alt="김구 선생">
+                    </div>
+                    <h3 class="fighter-name">김구 선생</h3>
+                    <p class="fighter-title">대한민국 임시정부 주석</p>
+                    <p class="fighter-intro">"내가 원하는 우리나라"를 꿈꾼 백범 선생</p>
+                </div>
+
+                <div class="fighter-card" data-fighter="nam">
+                    <div class="fighter-image">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/ed/%EB%82%A8%EC%9E%90%ED%98%84.jpg" alt="남자현 의사">
+                    </div>
+                    <h3 class="fighter-name">남자현 의사</h3>
+                    <p class="fighter-title">여성 최초 의열단원</p>
+                    <p class="fighter-intro">폭탄 투척으로 일본 제국주의에 맞선 여성 독립운동가</p>
+                </div>
+
+                <div class="fighter-card" data-fighter="yoon">
+                    <div class="fighter-image">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f3/%EC%82%AC%EC%A7%841%28%EC%9C%A4%EB%B4%89%EA%B8%B8_%EC%84%A0%EC%84%9C%EC%9E%A5%EB%A9%B4%29.jpg" alt="윤봉길 의사">
+                    </div>
+                    <h3 class="fighter-name">윤봉길 의사</h3>
+                    <p class="fighter-title">한인애국단원</p>
+                    <p class="fighter-intro">상하이 훙커우 공원 의거로 세계를 놀라게 한 의사</p>
+                </div>
+            </div>
+            <p class="scroll-hint">← 좌우로 스와이프하여 독립운동가를 선택하세요 →</p>
+        </div>
+    </section>
+
+    <!-- Chat Section -->
+    <section id="chat" class="chat-section">
+        <div class="container">
+            <div class="chat-container">
+                <div class="chat-profile">
+                    <div class="chat-profile-image" id="profileImage">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/An_Jung-geun.JPG" alt="안중근 의사" id="profileImg">
+                    </div>
+                    <h3 class="chat-profile-name" id="profileName">안중근 의사</h3>
+                    <p class="chat-profile-info" id="profileTitle">대한의군 참모중장</p>
+                    <p class="chat-profile-info" id="profileBirth">1879-1910</p>
+                </div>
+
+                <div class="chat-interface">
+                    <div class="questions-list" id="questionsList"></div>
+                    <div class="chat-display" id="chatDisplay">
+                        <p style="color: #999; text-align: center; padding: 50px 20px;">
+                            위의 질문을 선택하면 대화가 시작됩니다.
+                        </p>
+                    </div>
+                    <div class="typing-indicator" id="typingIndicator">답변을 준비하고 있습니다...</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section class="education-section">
+        <div class="container">
+            <h2 class="education-title">국민이 참여하는 역사 교육</h2>
+            <div class="education-grid">
+                <div class="education-card">
+                    <h3>🎓 역사 수업 보조 자료</h3>
+                    <p>교과서 속 독립운동가들의 생생한 이야기를 학생들이 직접 질문하며 배웁니다. 단순 암기가 아닌 대화를 통한 깊이 있는 학습이 가능합니다.</p>
+                </div>
+
+                <div class="education-card">
+                    <h3>🏛️ 독립기념관 연계 교육</h3>
+                    <p>독립기념관 교육 프로그램과 연계하여 온·오프라인 통합 역사 교육을 제공합니다. 현장 방문 전후 학습 자료로 활용할 수 있습니다.</p>
+                </div>
+
+                <div class="education-card">
+                    <h3>👨‍👩‍👧‍👦 세대를 넘은 소통</h3>
+                    <p>청소년부터 어르신까지, 모든 세대가 함께 독립운동가와 대화하며 역사를 공유합니다. 세대 간 역사 인식 격차를 해소합니다.</p>
+                </div>
+
+                <div class="education-card">
+                    <h3>📝 토론 수업 자료</h3>
+                    <p>"만약 내가 그 시대에 살았다면?" 독립운동가들의 답변을 바탕으로 학생들이 토론하고 자신의 생각을 정리합니다.</p>
+                </div>
+
+                <div class="education-card">
+                    <h3>🌍 글로벌 역사 교육</h3>
+                    <p>해외 한글학교 및 국제학교에서 한국 독립운동사를 쉽게 가르칠 수 있는 디지털 도구입니다. 언어 장벽을 넘어 전 세계에 확산 가능합니다.</p>
+                </div>
+
+                <div class="education-card">
+                    <h3>🎭 역할극 시나리오</h3>
+                    <p>AI 대화 내용을 바탕으로 학생들이 독립운동가 역할을 맡아 연극을 만들고 공연합니다. 역사가 살아 숨쉬는 교육이 됩니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p style="font-size: 1.1rem; font-weight: 600; margin-bottom: 5px;">광복 80년 기념사업추진위원회 후원</p>
+            <p style="font-size: 1rem; margin-bottom: 15px;">광복 100년 기념사업 아이디어 공모전 출품작</p>
+            <p style="font-size: 1.2rem; font-weight: 700; margin-bottom: 20px;">"타임캡슐 대화 - AI로 만나는 독립운동가"</p>
+            <p style="margin-top: 25px; font-size: 1.05rem; font-weight: 600; color: #FFD700;">
+                광복 80년, 국민주권으로 미래를 세우다
+            </p>
+            <p style="margin-top: 15px; font-size: 0.85rem; opacity: 0.7;">
+                국민이 직접 참여하고 주인으로서 함께하는 역사 교육 플랫폼
+            </p>
+            <p style="margin-top: 20px; font-size: 0.9rem; opacity: 0.8;">© 2025 이서준</p>
+        </div>
+    </footer>
+
+    <script>
+        // 독립운동가 데이터
+        const fighters = {
+            ahn: {
+                name: "안중근 의사",
+                title: "대한의군 참모중장",
+                birth: "1879-1910",
+                image: "安",
+                imageUrl: "https://upload.wikimedia.org/wikipedia/commons/4/4e/An_Jung-geun.JPG",
+                intro: "이토 히로부미를 처단한 의사이자 동양평화론의 저자",
+                questions: [
+                    {
+                        q: "왜 이토 히로부미를 저격하셨나요?",
+                        a: "학생, 이토 히로부미는 단순한 한 사람이 아니었습니다. 그는 우리 대한제국의 주권을 빼앗고, 수많은 동포들을 고통 속에 빠뜨린 침략의 원흉이었습니다.\n\n나는 1909년 10월 26일, 하얼빈 역에서 그를 처단했습니다. 이것은 개인적 복수가 아니라, 동양 평화를 위한 의거였습니다.\n\n법정에서 나는 이렇게 말했습니다. '나는 대한의군 참모중장으로서 조국의 독립과 동양평화를 위해 이토를 처단한 것이다.'\n\n나라가 없으면 우리는 모두 떠도는 나그네일 뿐입니다. 독립은 하늘이 주신 권리이며, 우리는 그것을 지키기 위해 목숨을 바쳐야 합니다."
+                    },
+                    {
+                        q: "감옥에서 두렵지 않으셨나요?",
+                        a: "두려움이 없었다고 하면 거짓말이겠지요. 나도 사람입니다. 서른한 살, 아직 젊은 나이에 감옥에 갇혀 죽음을 기다리는 것이 두렵지 않을 리 없습니다.\n\n하지만 감옥에서 나는 '동양평화론'을 집필하며 내 뜻을 글로 남겼습니다. 죽음 앞에서도 나는 조국의 독립과 동양의 평화를 꿈꾸었습니다.\n\n어머니께 쓴 마지막 편지에는 이렇게 적었습니다. '국가를 위해 몸을 바치는 것이 큰 효도입니다.'\n\n학생, 두려움은 있었지만 후회는 없었습니다. 만약 다시 태어난다 해도, 나는 똑같은 길을 걸을 것입니다."
+                    },
+                    {
+                        q: "동양평화론은 어떤 내용인가요?",
+                        a: "동양평화론은 감옥에서 사형을 기다리며 쓴 나의 유서이자, 동양 삼국의 평화를 위한 청사진이었습니다.\n\n나는 이 책에서 말했습니다. 일본이 한국을 침략한 것은 동양 평화를 깨뜨린 것이며, 진정한 평화는 각 나라가 서로의 주권을 존중할 때만 가능하다고 말입니다.\n\n한국, 중국, 일본 삼국이 서로 협력하여 서양 제국주의에 맞서야 한다고 주장했습니다. 하지만 그 협력은 침략과 지배가 아닌, 평등한 관계에서만 가능합니다.\n\n100년이 지난 지금도 이 책의 메시지는 유효합니다. 학생, 진정한 평화는 힘으로 억압하는 것이 아니라, 서로를 존중하고 이해하는 데서 시작됩니다."
+                    },
+                    {
+                        q: "손가락을 자르신 이유는?",
+                        a: "1909년, 단지동맹을 맺을 때의 일입니다. 우리 동지 11명은 이토 히로부미를 처단하고 조국의 독립을 되찾기로 맹세했습니다.\n\n그 맹세의 증표로, 나는 왼손 넷째 손가락을 잘라 '대한독립(大韓獨立)'이라는 글자를 태극기에 썼습니다. 피로 쓴 맹세였습니다.\n\n손가락 하나쯤이야 나라의 독립에 비하면 아무것도 아니었습니다. 고통은 있었지만 후회는 없었습니다.\n\n지금 생각하면, 그 손가락은 단순한 신체의 일부가 아니라 조국을 향한 나의 모든 마음이었습니다. 학생 여러분도 무언가 소중한 것을 지키기 위해서는 때로 희생이 필요하다는 것을 기억해 주세요."
+                    },
+                    {
+                        q: "어머니께 쓴 마지막 편지",
+                        a: "1910년 3월 15일, 사형을 열흘 앞두고 어머니께 마지막 편지를 썼습니다.\n\n'어머니, 아들이 불효를 용서하소서. 저는 곧 이 세상을 떠나지만, 마음만은 언제나 어머니 곁에 있을 것입니다. 국가를 위해 한 몸 바치는 것이 진정한 효도라 믿사오니, 너무 슬퍼하지 마소서.'\n\n편지를 쓰는 내내 눈물이 멈추지 않았습니다. 어머니의 얼굴이, 목소리가, 따뜻한 손길이 떠올랐습니다. 하지만 나는 어머니의 아들이기 전에 대한의 독립운동가였습니다.\n\n어머니는 나의 뜻을 이해해 주셨을 것입니다. 학생 여러분, 부모님의 사랑은 세상에서 가장 위대한 것입니다. 그 사랑에 감사하며 살아가세요."
+                    },
+                    {
+                        q: "31세에 순국하신 심정은?",
+                        a: "너무 일찍 가는 것 같아 아쉬웠습니다. 해야 할 일이 너무 많았고, 보고 싶은 것도 많았습니다. 특히 조국이 독립하는 그날을 보지 못하고 가는 것이 가장 안타까웠습니다.\n\n하지만 두렵지는 않았습니다. 나의 죽음이 헛되지 않을 것을 알았기 때문입니다. 나 한 사람이 죽더라도, 뒤에 수천 수만의 안중근이 일어날 것을 믿었습니다.\n\n1910년 3월 26일, 뤼순 감옥에서 교수형을 당하기 전, 나는 '위국헌신 군인본분(爲國獻身 軍人本分)'이라는 글을 남겼습니다. 나라를 위해 몸을 바치는 것이 군인의 본분이라는 뜻입니다.\n\n학생 여러분, 나이는 숫자에 불과합니다. 중요한 것은 얼마나 오래 사느냐가 아니라, 어떻게 사느냐입니다."
+                    },
+                    {
+                        q: "지금의 대한민국을 보면?",
+                        a: "감격스럽습니다. 정말 꿈만 같습니다. 일제의 총칼 아래 신음하던 나라가 이제 세계 10위권의 경제 강국이 되었다니, 믿기지 않습니다.\n\n무엇보다 기쁜 것은, 학생 여러분이 자유롭게 학교에 다니고, 한글로 된 책을 읽고, 태극기를 흔들며 살아간다는 것입니다. 이것이 바로 우리가 목숨을 바쳐 꿈꾼 나라입니다.\n\n하지만 한 가지 당부하고 싶습니다. 이 자유와 독립이 저절로 온 것이 아니라는 것을 잊지 마세요. 수많은 독립운동가들의 희생과 헌신이 있었기에 가능했습니다.\n\n지금의 대한민국을 지키고 더 나은 나라로 만드는 것, 그것이 바로 국민 주권의 실천입니다. 여러분 한 사람 한 사람이 이 나라의 주인입니다. 역사를 잊은 민족에게 미래는 없습니다. 기억하고, 감사하며, 더 나은 미래를 만들어 가세요."
+                    }
+                ]
+            },
+            yu: {
+                name: "유관순 열사",
+                title: "3.1 독립운동 열사",
+                birth: "1902-1920",
+                image: "柳",
+                imageUrl: "https://upload.wikimedia.org/wikipedia/commons/1/1b/Ryu_Gwan-sun.jpg",
+                intro: "18세의 나이로 아우내 장터 만세운동을 이끈 열사",
+                questions: [
+                    {
+                        q: "3.1운동에 참여하게 된 계기는?",
+                        a: "1919년 3월 1일, 서울 이화학당에서 만세 소리가 들려왔습니다. 그 순간 제 가슴은 뜨겁게 타올랐습니다.\n\n3월 5일, 학교에서 우리는 '대한독립 만세!'를 외치며 거리로 나갔습니다. 일본 경찰들이 우리를 막았지만, 우리의 열정을 막을 수는 없었습니다.\n\n학교가 폐쇄되자 저는 고향 천안으로 돌아가 만세운동을 준비했습니다. 어른들이 움직이지 않는다면, 젊은이들이라도 나서야 한다고 생각했습니다.\n\n열여섯 살 소녀였지만, 조국의 독립 앞에서 나이는 중요하지 않았습니다. 우리 모두가 대한의 국민이었고, 누구나 독립을 위해 싸울 권리가 있었습니다."
+                    },
+                    {
+                        q: "아우내 장터에서 무슨 일이?",
+                        a: "1919년 4월 1일, 아우내 장터는 사람들로 가득 찼습니다. 저는 태극기를 들고 선두에 섰습니다.\n\n'대한독립 만세! 대한독립 만세!'\n\n수천 명의 목소리가 하나가 되었습니다. 그 순간만큼은 우리가 자유로운 나라의 국민이었습니다. 눈물이 흘렀지만 행복했습니다.\n\n그러나 일본 헌병들이 총을 쏘기 시작했습니다. 아버지와 어머니가 제 앞에서 쓰러지셨습니다. 피가 흘렀지만 저는 만세를 멈추지 않았습니다.\n\n부모님은 돌아가셨지만, 그분들의 뜻은 저를 통해 이어졌습니다. 저는 더 크게, 더 힘차게 외쳤습니다. 그것이 부모님께 드릴 수 있는 마지막 효도였습니다."
+                    },
+                    {
+                        q: "감옥에서 어떻게 버티셨나요?",
+                        a: "버텼다기보다는... 싸웠습니다. 서대문 형무소 8호 감방은 지옥 같았지만, 제 정신만은 자유로웠습니다.\n\n일본 간수들이 저를 고문했습니다. 채찍으로 때리고, 손톱을 뽑고, 온갖 고통을 주었습니다. 하지만 저는 굴복하지 않았습니다.\n\n감방 안에서도, 창살 사이로도 저는 계속 만세를 불렀습니다. '대한독립 만세!' 이 외침만은 누구도 막을 수 없었습니다.\n\n다른 수감자들이 제 용기에 힘을 얻었습니다. 우리는 함께 노래를 불렀고, 서로를 격려했습니다. 육체는 갇혔지만 우리의 정신은 자유로웠습니다.\n\n1920년 9월 28일, 저는 열여덟 살의 나이로 옥중에서 순국했습니다. 하지만 후회는 없었습니다."
+                    },
+                    {
+                        q: "부모님을 잃은 슬픔은?",
+                        a: "말로 표현할 수 없는 고통이었습니다. 아버지와 어머니가 제 눈앞에서 일본군의 총에 맞아 쓰러지는 것을 보았습니다.\n\n그날 밤, 저는 울고 또 울었습니다. 왜 하필 제 부모님이어야 했을까. 왜 우리 민족이 이런 고통을 받아야 할까.\n\n하지만 슬픔에만 잠겨 있을 수 없었습니다. 부모님은 조국의 독립을 위해 기꺼이 목숨을 바치셨습니다. 제가 주저앉는다면, 그것이야말로 부모님의 뜻을 저버리는 것이었습니다.\n\n그래서 저는 더 열심히 독립운동을 했습니다. 부모님의 몫까지, 더 크게 만세를 불렀습니다. 슬픔을 힘으로 바꾸었습니다.\n\n학생 여러분, 부모님을 사랑하세요. 그리고 그 사랑에 보답하는 방법은 올바르게 사는 것임을 기억하세요."
+                    },
+                    {
+                        q: "18살의 나이에 두렵지 않았나요?",
+                        a: "두려웠습니다. 열여덟 살은 아직 어린 나이입니다. 친구들과 웃고 떠들며 꿈을 꿔야 할 나이였습니다.\n\n일본 경찰에게 체포될 때, 고문을 받을 때, 감옥에 갇혔을 때, 저는 매 순간 두려웠습니다. 죽음이 코앞에 다가왔을 때는 더욱 그랬습니다.\n\n하지만 두려움보다 큰 것이 있었습니다. 조국에 대한 사랑, 정의에 대한 믿음, 자유에 대한 갈망이었습니다.\n\n열여덟이라는 나이가 어리다고요? 아닙니다. 나이는 숫자일 뿐입니다. 중요한 것은 무엇이 옳은지 아는 것, 그리고 그것을 위해 행동하는 용기입니다.\n\n지금의 여러분도 충분히 세상을 바꿀 수 있습니다. 나이를 핑계로 포기하지 마세요."
+                    },
+                    {
+                        q: "여성으로서 차별은 없었나요?",
+                        a: "많았습니다. 당시는 여성이 정치에 관여하거나 거리로 나서는 것 자체가 금기시되던 시대였습니다.\n\n어른들은 말했습니다. '여자가 무슨 독립운동이냐', '집안에서 조용히 있어라.' 하지만 저는 듣지 않았습니다.\n\n나라가 위기에 처했는데 남자와 여자가 따로 있을 수 없습니다. 우리 모두가 대한의 국민이고, 모두가 독립을 위해 싸워야 했습니다.\n\n일본 경찰들도 처음에는 어린 소녀를 우습게 봤습니다. 하지만 제가 끝까지 굴복하지 않자, 그들은 더 잔혹하게 저를 고문했습니다.\n\n여성이라서, 어려서, 약하다고 생각했던 모든 사람들에게 증명하고 싶었습니다. 우리도 강하다는 것을, 우리도 조국을 사랑한다는 것을요."
+                    },
+                    {
+                        q: "청소년들에게 하고 싶은 말",
+                        a: "여러분은 지금 자유롭게 학교에 다니고, 꿈을 꾸고, 미래를 계획할 수 있습니다. 이것이 얼마나 소중한 것인지 잊지 마세요.\n\n저는 열여덟 살에 죽었지만 후회하지 않습니다. 제가 살았던 짧은 시간이 조국의 독립에 조금이라도 도움이 되었다면, 그것으로 충분합니다.\n\n여러분에게 당부하고 싶습니다. 옳지 않은 것을 보면 침묵하지 마세요. 정의롭지 못한 일에 눈감지 마세요. 나이가 어리다는 것은 핑계가 될 수 없습니다. 여러분도 이 나라의 주인이고, 참여할 권리가 있습니다.\n\n작은 실천부터 시작하세요. 친구를 도와주는 것, 어려운 이웃을 돌보는 것, 환경을 보호하는 것. 이 모든 것이 세상을 바꾸는 시작입니다.\n\n여러분 한 사람 한 사람이 소중합니다. 스스로를 과소평가하지 마세요. 여러분의 목소리가 세상을 바꿀 수 있습니다. 이것이 바로 국민 주권입니다."
+                    }
+                ]
+            },
+            kim: {
+                name: "김구 선생",
+                title: "대한민국 임시정부 주석",
+                birth: "1876-1949",
+                image: "金",
+                imageUrl: "https://upload.wikimedia.org/wikipedia/commons/d/db/Kim_Gu_in_1949.jpg",
+                intro: "'내가 원하는 우리나라'를 꿈꾼 백범 선생",
+                questions: [
+                    {
+                        q: "백범일지를 쓰신 이유는?",
+                        a: "백범일지는 나의 생애를 기록한 자서전이지만, 단순한 회고록이 아닙니다. 후손들에게 남기는 교훈서이자, 독립운동의 역사를 전하는 증언록입니다.\n\n나는 이 책에서 내가 걸어온 길을 솔직하게 기록했습니다. 성공도, 실패도, 기쁨도, 고통도 모두 담았습니다. 왜냐하면 역사는 미화된 영웅담이 아니라, 진실한 인간의 이야기여야 하기 때문입니다.\n\n특히 젊은이들이 이 책을 읽고 깨달았으면 했습니다. 독립운동가도 처음부터 완벽한 영웅이 아니었다는 것을, 수많은 시행착오와 고민 끝에 오늘에 이르렀다는 것을요.\n\n학생 여러분, 역사를 배우는 이유는 과거를 아는 것이 아니라, 미래를 준비하기 위함입니다. 우리의 실수를 반복하지 말고, 우리의 정신은 이어가길 바랍니다."
+                    },
+                    {
+                        q: "'내가 원하는 우리나라'의 의미는?",
+                        a: "1947년, 해방된 조국에서 나는 이 글을 썼습니다. 사람들은 부강한 나라, 군사 강국, 경제 대국을 원했습니다. 하지만 나는 다른 것을 원했습니다.\n\n'나는 우리나라가 세계에서 가장 아름다운 나라가 되기를 원한다. 가장 부강한 나라가 아니라, 가장 아름다운 나라를 원한다.'\n\n힘으로 다른 나라를 지배하는 것이 아니라, 문화의 힘으로 세계에 기여하는 나라. 오직 한없이 가지고 싶은 것은 높은 문화의 힘이었습니다.\n\n우리 민족이 남의 것을 빼앗기보다는 빼앗기고, 남을 괴롭히기보다는 괴롭힘을 당한 역사를 가졌기에, 우리는 평화를 사랑하는 나라가 되어야 한다고 믿었습니다.\n\n지금의 대한민국이 K-문화로 세계를 감동시키는 것을 보면, 내 꿈이 이루어지고 있다는 생각이 듭니다."
+                    },
+                    {
+                        q: "임시정부에서의 활동은?",
+                        a: "1919년 상하이에서 대한민국 임시정부가 수립되었고, 나는 경무국장, 내무총장, 국무령을 거쳐 마지막에는 주석이 되었습니다.\n\n하지만 화려한 직함과는 달리, 우리의 현실은 참담했습니다. 사무실은 좁은 셋방이었고, 예산은 항상 부족했습니다. 동지들과 함께 가난과 고독 속에서 버텨야 했습니다.\n\n가장 힘들었던 것은 동지들 간의 노선 갈등이었습니다. 외교론, 실력양성론, 무장투쟁론... 모두가 조국의 독립을 원했지만 방법론에서 갈라섰습니다.\n\n그럼에도 우리는 포기하지 않았습니다. 임시정부는 27년간 중국 곳곳을 떠돌며 명맥을 이어갔습니다. 왜냐하면 우리가 바로 대한민국이었기 때문입니다.\n\n학생 여러분, 조직을 이끈다는 것은 화려한 것이 아닙니다. 인내와 헌신, 그리고 타협과 통합의 리더십이 필요합니다."
+                    },
+                    {
+                        q: "가장 힘들었던 순간은?",
+                        a: "수없이 많았지만, 1932년 윤봉길 의사의 의거 직후가 가장 아찔했던 순간이었습니다.\n\n윤봉길 의사가 상하이 훙커우 공원에서 일본군 고위층을 폭살했습니다. 이 사건으로 임시정부는 일본의 집중 추격을 받게 되었습니다.\n\n우리는 상하이를 떠나 항저우, 난징, 창사, 광저우... 중국 전역을 떠돌았습니다. 언제 잡힐지 모르는 두려움, 내일을 기약할 수 없는 불안감 속에서 살았습니다.\n\n동지들이 하나둘 쓰러져 갔습니다. 병으로, 굶주림으로, 일본군의 총탄에. 그들을 제대로 장례도 치러주지 못한 채 다시 길을 떠나야 했습니다.\n\n하지만 우리는 포기하지 않았습니다. 왜냐하면 우리가 넘어지면 대한민국이 사라지는 것이었기 때문입니다. 그 책임감이 우리를 버티게 했습니다."
+                    },
+                    {
+                        q: "해방 후 분단을 보며 느낀 점은?",
+                        a: "1945년 8월 15일, 해방의 기쁨도 잠시, 곧 절망이 찾아왔습니다. 조국이 38선을 경계로 둘로 갈라진 것입니다.\n\n우리는 조국의 완전한 독립을 꿈꿨습니다. 하지만 미국과 소련이 한반도를 나눠 점령했고, 남과 북에 각각 다른 정부가 들어섰습니다.\n\n나는 남북 협상을 추진했습니다. 1948년 평양에 가서 김일성과 김규식 선생과 함께 통일정부 수립을 논의했습니다. 하지만 결국 실패했습니다.\n\n가장 가슴 아팠던 것은, 독립을 위해 함께 싸웠던 동지들이 이념으로 갈라져 서로 총을 겨누게 된 것입니다. 이것이 우리가 원했던 해방이었을까요?\n\n학생 여러분, 분단의 고통은 아직도 계속되고 있습니다. 평화통일을 이루는 것, 그것이 우리 세대가 하지 못한 과제입니다. 여러분이 완성해 주길 바랍니다."
+                    },
+                    {
+                        q: "청년들에게 당부하고 싶은 것은?",
+                        a: "청년들이여, 여러분은 이 나라의 진정한 주인입니다. 우리 세대가 독립을 쟁취했다면, 여러분은 국민 주권으로 더 나은 대한민국을 만들어야 합니다.\n\n첫째, 역사를 잊지 마십시오. 역사를 잊은 민족에게 미래는 없습니다. 우리가 어디서 왔는지 알아야 어디로 가야 할지 알 수 있습니다.\n\n둘째, 개인의 이익보다 공동체를 생각하십시오. 나 하나 잘 사는 것보다 우리 모두가 함께 잘 사는 나라를 만드십시오.\n\n셋째, 평화를 사랑하십시오. 힘이 강하다고 해서 약한 나라를 억압하는 제국주의가 되지 마십시오. 문화와 정신의 힘으로 세계에 기여하는 나라가 되십시오.\n\n넷째, 통일을 준비하십시오. 남과 북이 하나 되는 그날이 반드시 옵니다. 그때를 준비하는 것이 여러분의 사명입니다.\n\n마지막으로, 국민으로서의 권리를 행사하고 책임을 다하십시오. 여러분 한 사람 한 사람의 참여가 대한민국을 만듭니다. 세상이 아무리 변해도 정의와 진리는 변하지 않습니다."
+                    }
+                ]
+            },
+            nam: {
+                name: "남자현 의사",
+                title: "여성 최초 의열단원",
+                birth: "1872-1933",
+                image: "南",
+                imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/ed/%EB%82%A8%EC%9E%90%ED%98%84.jpg",
+                intro: "폭탄 투척으로 일본 제국주의에 맞선 여성 독립운동가",
+                questions: [
+                    {
+                        q: "여성 최초 의열단원이 되신 계기는?",
+                        a: "1920년대, 만주에서 의열단 단장 김원봉을 만났을 때의 일입니다. 당시 저는 이미 50세가 넘은 나이였지만, 조국을 위해 무언가를 하고 싶었습니다.\n\n김원봉 단장은 처음에는 망설였습니다. '여성이, 그것도 이 나이에 의열 투쟁을 할 수 있겠는가?' 하지만 저는 증명했습니다. 나이와 성별은 조국애 앞에서 장애가 될 수 없다는 것을요.\n\n저는 폭탄 투척 훈련을 받았고, 암살과 파괴 공작을 익혔습니다. 누구도 50대 부인이 폭탄을 던질 것이라고는 예상하지 못했습니다. 그것이 바로 저의 강점이었습니다.\n\n1923년, 저는 조선총독부와 종로경찰서에 폭탄을 투척했습니다. 비록 목표물을 완전히 파괴하지는 못했지만, 우리의 저항 의지를 확실히 보여주었습니다."
+                    },
+                    {
+                        q: "폭탄을 던지는 순간의 심정은?",
+                        a: "1923년 1월 12일, 종로경찰서 앞에 섰을 때, 제 손은 떨리지 않았습니다. 가슴 속에 품은 폭탄의 무게가 느껴졌지만, 두렵지 않았습니다.\n\n'이제다.' 폭탄을 던지는 순간, 지난 50년의 한이 모두 폭발하는 것 같았습니다. 나라 잃은 백성으로 살아온 치욕, 일본의 폭압 아래 신음하던 동포들의 고통, 모든 것이 그 폭탄에 실려 날아갔습니다.\n\n폭발음이 울려 퍼졌습니다. 일본 경찰들이 혼비백산했습니다. 그 순간만큼은 제가 승리한 것 같았습니다. 비록 체포되더라도, 저는 제 역할을 다했다고 생각했습니다.\n\n학생 여러분, 정의를 위한 행동은 결과보다 과정이 중요합니다. 두려움을 이기고 옳은 일을 실천하는 것, 그것이 바로 용기입니다."
+                    },
+                    {
+                        q: "여성이라는 이유로 차별은?",
+                        a: "끊임없었습니다. 조선 사회에서 여성은 '안방'에 머물러야 했습니다. 교육도, 정치 참여도, 모든 것이 금기였습니다.\n\n독립운동에 뛰어들자 더 심한 비난이 쏟아졌습니다. '여자가 무슨 폭탄이냐', '남자들도 못하는 일을 여자가 하겠다니', '집안의 수치다.' 심지어 동지들 중에서도 의심하는 사람들이 있었습니다.\n\n하지만 저는 이렇게 생각했습니다. 나라가 위기에 처했는데, 남자와 여자가 따로 있을 수 없다고. 조국은 아들만의 것이 아니라 딸의 것이기도 하다고.\n\n여성이라는 이유로 제한받는 것들이 오히려 저의 무기가 되기도 했습니다. 일본 경찰들은 50대 부인을 의심하지 않았고, 그 틈을 타 저는 작전을 수행할 수 있었습니다.\n\n학생 여러분, 특히 여학생들. 여러분의 가능성을 스스로 제한하지 마세요. 여러분도 역사를 바꿀 수 있습니다."
+                    },
+                    {
+                        q: "어떻게 폭탄 제조를 배우셨나요?",
+                        a: "만주에서 의열단 훈련소에 입소했을 때, 저는 가장 나이 많은 단원이었습니다. 젊은 청년들 사이에서 50대 부인이 폭탄 제조를 배우는 모습이 낯설었을 것입니다.\n\n김원봉 단장은 직접 저를 가르쳤습니다. 폭탄의 구조, 신관 작동 원리, 투척 방법, 폭발 범위 계산... 모든 것을 익혔습니다.\n\n손놀림이 서툴렀습니다. 젊은이들보다 훨씬 느렸습니다. 하지만 저는 포기하지 않았습니다. 밤낮으로 연습했고, 결국 완벽하게 익혔습니다.\n\n폭탄을 만지면서 생각했습니다. 이것이 바로 약자의 무기라고. 강대국의 군대와 정면으로 싸울 수는 없지만, 폭탄 하나로 그들의 심장부를 타격할 수는 있다고.\n\n나이는 숫자에 불과합니다. 배우고자 하는 의지만 있다면, 무엇이든 가능합니다."
+                    },
+                    {
+                        q: "가족들의 반응은?",
+                        a: "가족들은 반대했습니다. 특히 아들은 격렬히 말렸습니다. '어머니, 이제 나이도 드셨는데 집에서 편히 지내세요. 위험한 일은 젊은이들이 할 겁니다.'\n\n하지만 저는 대답했습니다. '네가 위험한 일을 하는 것은 괜찮고, 어미인 내가 하는 것은 안 된단 말이냐? 나도 이 나라의 국민이다.'\n\n사실 가족을 떠나는 것이 가장 힘들었습니다. 손자들의 얼굴을 다시 보지 못할 수도 있다는 것을 알았습니다. 하지만 지금 행동하지 않으면, 그 아이들이 평생 일본의 식민지 백성으로 살아야 합니다.\n\n의열 활동을 하면서 가족을 위험에 빠뜨렸습니다. 일본 경찰이 집을 수색했고, 가족들이 감시를 받았습니다. 미안했지만, 후회하지는 않았습니다.\n\n때로는 개인의 행복보다 더 큰 가치를 위해 희생해야 할 때가 있습니다. 그것이 저의 선택이었습니다."
+                    },
+                    {
+                        q: "여성 독립운동가로 기억되고 싶은 모습은?",
+                        a: "저는 영웅이 되고 싶지 않았습니다. 그저 조국을 사랑한 한 사람의 어머니, 한 사람의 여성으로 기억되고 싶습니다.\n\n역사책에는 유명한 남성 독립운동가들의 이름이 많이 기록되어 있습니다. 하지만 그 뒤에는 수많은 여성들이 있었습니다. 이름 없이 독립자금을 모으고, 정보를 전달하고, 부상자를 치료하고, 아이들을 키우며 독립의 꿈을 이어간 여성들이요.\n\n제가 기억되고 싶은 모습은 이것입니다. 나이와 성별의 한계를 넘어, 옳다고 믿는 것을 실천한 사람. 두려움에 굴복하지 않고, 끝까지 저항한 사람.\n\n그리고 후대의 여성들에게 이렇게 말하고 싶습니다. '여러분도 할 수 있다'고. 사회가 정한 틀에 갇히지 말고, 스스로의 길을 개척하라고.\n\n학생 여러분, 특히 여학생 여러분. 여러분 안에 무한한 가능성이 있습니다. 여러분도 이 나라의 주인입니다. 국민 주권은 남성만의 것이 아닙니다. 세상이 '여자는 이래야 한다'고 말해도, 여러분 스스로가 길을 만들어 가세요."
+                    }
+                ]
+            },
+            yoon: {
+                name: "윤봉길 의사",
+                title: "한인애국단원",
+                birth: "1908-1932",
+                image: "尹",
+                imageUrl: "https://upload.wikimedia.org/wikipedia/commons/f/f3/%EC%82%AC%EC%A7%841%28%EC%9C%A4%EB%B4%89%EA%B8%B8_%EC%84%A0%EC%84%9C%EC%9E%A5%EB%A9%B4%29.jpg",
+                intro: "상하이 훙커우 공원 의거로 세계를 놀라게 한 의사",
+                questions: [
+                    {
+                        q: "도시락 폭탄 계획은 어떻게?",
+                        a: "1932년 4월 29일, 일본의 천장절(천황 생일)과 상하이 전승 기념식이 열린다는 정보를 입수했습니다. 일본군 수뇌부가 한자리에 모이는 절호의 기회였습니다.\n\n김구 선생님께서 저에게 이 임무를 맡기셨습니다. 하지만 문제가 있었습니다. 폭탄을 어떻게 현장에 반입할 것인가?\n\n그때 저는 생각했습니다. 도시락 폭탄과 물통 폭탄을 만들자고. 행사장에 도시락과 물통을 들고 가는 것은 자연스러웠습니다. 누구도 의심하지 않을 것입니다.\n\n김구 선생님과 저는 마지막 만찬을 했습니다. 저는 선생님께 말씀드렸습니다. '이것이 제가 조국을 위해 할 수 있는 마지막 일입니다.' 선생님의 눈에 눈물이 고였지만, 저는 담담했습니다."
+                    },
+                    {
+                        q: "훙커우 공원에서의 순간은?",
+                        a: "1932년 4월 29일, 상하이 훙커우 공원. 일장기가 가득한 그곳에 저는 평범한 한국인처럼 서 있었습니다.\n\n단상에는 일본군 사령관 시라카와 대장, 상하이 거류민단장 가와바타, 제3함대 사령관 노무라 중장이 앉아 있었습니다. 그들은 승리를 자축하고 있었습니다.\n\n가슴이 뛰었지만 손은 떨리지 않았습니다. 저는 단상으로 다가가 도시락 폭탄을 던졌습니다. 물통 폭탄도 이어서 던졌습니다.\n\n'콰광!' 엄청난 폭발음과 함께 현장은 아수라장이 되었습니다. 시라카와 대장과 가와바타는 현장에서 즉사했고, 여러 명이 중상을 입었습니다.\n\n저는 체포되었습니다. 하지만 후회는 없었습니다. 세계가 한국의 독립 의지를 목격했습니다. 이 한 방이 수천 수만의 대포보다 강력했습니다."
+                    },
+                    {
+                        q: "어머니께 드린 마지막 편지",
+                        a: "의거를 떠나기 전, 어머니께 마지막 편지를 썼습니다. 글을 쓰는 내내 눈물이 흘렀습니다.\n\n'어머니, 불효자 봉길이 이제 어머니 곁을 떠납니다. 이 아들이 효도 한 번 제대로 못해드리고 먼저 가게 되어 죄송합니다.'\n\n어머니는 저를 낳고 기르시며 얼마나 많은 고생을 하셨습니까. 하지만 저는 어머니께 아무것도 해드리지 못했습니다. 오히려 걱정만 끼쳐드렸습니다.\n\n'하지만 어머니, 아들이 조국을 위해 한 몸 바치는 것을 자랑스럽게 여겨 주십시오. 이것이 불효자가 드릴 수 있는 마지막 효도입니다.'\n\n어머니는 제 편지를 받고 통곡하셨다고 들었습니다. 하지만 동시에 자랑스러워하셨다고도 합니다. '내 아들이 나라를 위해 목숨을 바쳤으니, 이 어미는 자랑스럽다'고.\n\n학생 여러분, 부모님을 사랑하세요. 그리고 그 사랑에 올바르게 사는 것으로 보답하세요."
+                    },
+                    {
+                        q: "25세에 순국하신 심정은?",
+                        a: "너무 젊은 나이였습니다. 스물다섯이면 꿈을 펼쳐야 할 나이, 가정을 꾸리고 아이를 키워야 할 나이였습니다.\n\n하지만 나라가 없는데 무슨 꿈을 꾸겠습니까. 조국이 독립하지 못하면 우리 모두는 노예로 살아야 합니다. 제 한 몸이 아까워 망설인다면, 후손들이 대대손손 노예로 살 것입니다.\n\n1932년 12월 19일, 가나자와 형무소에서 저는 총살형을 당했습니다. 25세, 너무 짧은 생애였습니다.\n\n하지만 후회는 없었습니다. 제 죽음이 헛되지 않았기 때문입니다. 훙커우 공원 의거는 전 세계에 한국의 독립 의지를 알렸고, 중국 장제스 주석도 감동하여 임시정부를 본격적으로 지원하기 시작했습니다.\n\n학생 여러분, 인생의 가치는 길이가 아니라 깊이로 측정됩니다. 짧게 살더라도 의미 있게 사는 것이 중요합니다."
+                    },
+                    {
+                        q: "두렵지 않으셨나요?",
+                        a: "두려웠습니다. 죽음이 두렵지 않은 사람이 어디 있겠습니까. 스물다섯 살, 아직 청춘인데 죽어야 한다는 것이 슬프고 두려웠습니다.\n\n훙커우 공원으로 가는 길, 제 다리가 떨렸습니다. 돌아가고 싶은 마음도 들었습니다. '내가 왜 이 일을 해야 하나. 다른 사람이 해도 되지 않나.'\n\n하지만 저는 제 자신에게 물었습니다. '다른 사람에게 맡기고 나만 살겠다는 것이 옳은가? 누군가는 해야 할 일이라면, 내가 하는 것이 맞지 않은가?'\n\n김구 선생님과 나눈 약속, 조국을 향한 사랑, 동포들의 고통... 이 모든 것이 저를 버티게 했습니다.\n\n두려움은 당연한 것입니다. 하지만 두려움에 굴복하지 않고 옳은 일을 실천하는 것, 그것이 바로 용기입니다. 학생 여러분도 두려움을 극복하고 정의를 실천하는 사람이 되길 바랍니다."
+                    },
+                    {
+                        q: "지금의 청년들에게",
+                        a: "지금의 청년들이여, 여러분은 우리가 꿈꾸던 자유로운 대한민국에서 살고 있습니다. 이것이 얼마나 소중한 것인지 잊지 마세요.\n\n저는 스물다섯에 죽었지만, 여러분은 긴 미래가 있습니다. 그 미래를 어떻게 살 것인가는 여러분의 선택입니다. 여러분이 바로 이 나라의 주인이기 때문입니다.\n\n첫째, 역사를 기억하세요. 우리의 희생이 헛되지 않도록, 이 나라가 어떻게 독립했는지 기억하세요.\n\n둘째, 국민으로서 목소리를 내세요. 불의를 보고 침묵하는 것은 불의에 동조하는 것입니다. 여러분의 참여가 민주주의를 지킵니다.\n\n셋째, 개인의 성공도 중요하지만 공동체를 잊지 마세요. 나 하나 잘 사는 것보다 우리 모두가 함께 잘 사는 사회를 만드세요.\n\n넷째, 평화를 사랑하되 평화를 지킬 힘을 기르세요. 약하면 침략당합니다. 하지만 강하다고 남을 억압해서는 안 됩니다.\n\n마지막으로, 여러분의 삶을 의미 있게 사세요. 길게 사는 것보다 깊게 사는 것이 중요합니다. 국민 주권으로 더 나은 미래를 만들어 가세요."
+                    }
+                ]
+            }
+        };
+
+        let currentFighter = null;
+
+        // 타이핑 애니메이션
+        function typeWriter(text, element, speed = 30) {
+            element.innerHTML = '';
+            let i = 0;
+            
+            function type() {
+                if (i < text.length) {
+                    const char = text.charAt(i);
+                    // \n을 <br>로 변환
+                    if (char === '\n') {
+                        element.innerHTML += '<br>';
+                    } else {
+                        element.innerHTML += char;
+                    }
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    document.getElementById('typingIndicator').classList.remove('active');
+                }
+            }
+            
+            type();
+        }
+
+        // 독립운동가 선택
+        document.querySelectorAll('.fighter-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const fighterId = this.getAttribute('data-fighter');
+                loadFighter(fighterId);
+                
+                // 스크롤 애니메이션
+                document.getElementById('chat').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        function loadFighter(fighterId) {
+            currentFighter = fighters[fighterId];
+            
+            // 프로필 업데이트
+            const profileImg = document.getElementById('profileImg');
+            profileImg.src = currentFighter.imageUrl;
+            profileImg.alt = currentFighter.name;
+            document.getElementById('profileName').textContent = currentFighter.name;
+            document.getElementById('profileTitle').textContent = currentFighter.title;
+            document.getElementById('profileBirth').textContent = currentFighter.birth;
+            
+            // 질문 목록 생성
+            const questionsList = document.getElementById('questionsList');
+            questionsList.innerHTML = '';
+            
+            currentFighter.questions.forEach((qa, index) => {
+                const button = document.createElement('button');
+                button.className = 'question-button';
+                
+                // 번호 배지
+                const numberBadge = document.createElement('div');
+                numberBadge.className = 'question-number';
+                numberBadge.textContent = index + 1;
+                
+                // 질문 텍스트
+                const questionText = document.createElement('div');
+                questionText.className = 'question-text';
+                questionText.textContent = qa.q;
+                
+                button.appendChild(numberBadge);
+                button.appendChild(questionText);
+                button.onclick = () => showAnswer(index);
+                questionsList.appendChild(button);
+            });
+            
+            // 채팅 초기화
+            document.getElementById('chatDisplay').innerHTML = '<p style="color: #999; text-align: center; padding: 50px 20px;">위의 질문을 선택하면 대화가 시작됩니다.</p>';
+            
+            // 채팅 섹션 표시
+            document.getElementById('chat').classList.add('active');
+        }
+
+        function showAnswer(questionIndex) {
+            const qa = currentFighter.questions[questionIndex];
+            const chatDisplay = document.getElementById('chatDisplay');
+            const typingIndicator = document.getElementById('typingIndicator');
+            
+            // 모든 질문 버튼에서 active 클래스 제거
+            document.querySelectorAll('.question-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // 클릭된 질문 버튼에 active 클래스 추가
+            const allButtons = document.querySelectorAll('.question-button');
+            if (allButtons[questionIndex]) {
+                allButtons[questionIndex].classList.add('active');
+            }
+            
+            // 질문 추가
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'message';
+            questionDiv.innerHTML = `<div class="message-question">${qa.q}</div>`;
+            chatDisplay.innerHTML = '';
+            chatDisplay.appendChild(questionDiv);
+            
+            // 모바일에서 채팅 디스플레이로 스크롤
+            setTimeout(() => {
+                chatDisplay.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start'
+                });
+            }, 100);
+            
+            // 타이핑 인디케이터 표시
+            typingIndicator.classList.add('active');
+            
+            // 답변 타이핑 애니메이션
+            setTimeout(() => {
+                const answerDiv = document.createElement('div');
+                answerDiv.className = 'message';
+                const answerText = document.createElement('div');
+                answerText.className = 'message-answer';
+                answerDiv.appendChild(answerText);
+                chatDisplay.appendChild(answerDiv);
+                
+                typeWriter(qa.a, answerText, 20);
+            }, 1000);
+        }
+
+        // 부드러운 스크롤
+        document.querySelector('.cta-button').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('fighters').scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
